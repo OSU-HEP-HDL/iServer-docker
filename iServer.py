@@ -4,6 +4,7 @@ import time
 import datetime
 import re
 from influxdb import InfluxDBClient
+import requests
 
 client = None
 dbname = 'dcsDB'
