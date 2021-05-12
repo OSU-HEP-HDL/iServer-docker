@@ -77,13 +77,43 @@ def wait_for_server(host, port, nretries=5):
     print('cannot connect to', url)
     sys.exit(1)
 
-if __name__ == '__main__':
-    print('connecting to database: localhost:8086')
-    client = InfluxDBClient(host='localhost', port=8086)
-    wait_for_server(host='localhost', port=8086)
+def connect_db(host, port, reset):
+    '''connect to the database, and create it if it does notexist'''
+    global client
+    print('connecting to database: {}:{}'.format(host,port))
+    client = InfluxDBClient(host, port, retries=5, timeout=1)
+    wait_for_server(host, port)
     if not db_exists():
         client.create_database(dbname)
     client.switch_database(dbname)
+
+if __name__ == '__main__':
+    import sys
+    from optparse import OptionParser
+
+    parser = OptionParser('%prog [OPTIONS] <host> <port>')
+    parser.add_option(
+            '-r', '--reset', dest='reset',
+            help='reset database',
+            default=False,
+            action='store_true'
+            )
+    parser.add_option(
+            '-n', '--nmeasurements', dest='nmeasurements',
+            type='int',
+            help='reset database',
+            default=0
+            )
+
+    options, args = parser.parse_args()
+    if len(args)!=2:
+        parser.print_usage()
+        print('please specify two arguments')
+        sys.exit(1)
+
+    host, port = args
+    connect_db(host, port, options.reset)
+
     while True:
         temp, rh = readiServer(iServerHost)
         print('temperature: {} F, humidity = {} % RH '.format(temp, rh))
