@@ -9,7 +9,7 @@ COPY requirements.txt /app/requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 # Copy the current directory contents into the container at /app
-COPY app.py /app/iServer.py
+COPY iServer.py /app/iServer.py
 
 # Run app.py when the container launches
 # The -u flag specifies to use the unbuffered ouput.
