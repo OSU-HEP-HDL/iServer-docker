@@ -78,7 +78,7 @@ def wait_for_server(host, port, nretries=5):
     sys.exit(1)
 
 if __name__ == '__main__':
-    print('connecting to database: {}:{}'.format(host,port))
+    print('connecting to database: localhost:8086')
     client = InfluxDBClient(host='localhost', port=8086)
     wait_for_server(host='localhost', port=8086)
     if not db_exists():
