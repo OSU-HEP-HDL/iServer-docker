@@ -5,7 +5,9 @@ import datetime
 import re
 from influxdb import InfluxDBClient
 
-host = '10.206.68.18'
+client = None
+dbname = 'dcsDB'
+iServerHost = '10.206.68.18'
 # iServer ip address
 
 def connectiServer(hostname, port, content):
@@ -50,6 +52,15 @@ def uploaddata(temperature, humidity):
 
     return data_list
 
+
+def db_exists():
+    '''returns True if the database exists'''
+    dbs = client.get_list_database()
+    for db in dbs:
+        if db['name'] == dbname:
+            return True
+    return False
+
 def wait_for_server(host, port, nretries=5):
     '''wait for the server to come online for waiting_time, nretries times.'''
     url = 'http://{}:{}'.format(host, port)
@@ -67,12 +78,14 @@ def wait_for_server(host, port, nretries=5):
     sys.exit(1)
 
 if __name__ == '__main__':
-    global client
+    print('connecting to database: {}:{}'.format(host,port))
     client = InfluxDBClient(host='localhost', port=8086)
     wait_for_server(host='localhost', port=8086)
-    client.switch_database('dcsDB')
+    if not db_exists():
+        client.create_database(dbname)
+    client.switch_database(dbname)
     while True:
-        temp, rh = readiServer(host)
+        temp, rh = readiServer(iServerHost)
         print('temperature: {} F, humidity = {} % RH '.format(temp, rh))
         client.write_points(uploaddata(temp, rh))
         time.sleep(3)
