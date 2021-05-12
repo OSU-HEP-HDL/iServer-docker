@@ -50,9 +50,26 @@ def uploaddata(temperature, humidity):
 
     return data_list
 
+def wait_for_server(host, port, nretries=5):
+    '''wait for the server to come online for waiting_time, nretries times.'''
+    url = 'http://{}:{}'.format(host, port)
+    waiting_time = 1
+    for i in range(nretries):
+        try:
+            requests.get(url)
+            return 
+        except requests.exceptions.ConnectionError:
+            print('waiting for', url)
+            time.sleep(waiting_time)
+            waiting_time *= 2
+            pass
+    print('cannot connect to', url)
+    sys.exit(1)
 
 if __name__ == '__main__':
+    global client
     client = InfluxDBClient(host='localhost', port=8086)
+    wait_for_server(host='localhost', port=8086)
     client.switch_database('dcsDB')
     while True:
         temp, rh = readiServer(host)
