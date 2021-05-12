@@ -8,7 +8,6 @@ import requests
 
 client = None
 dbname = 'dcsDB'
-iServerHost = '10.206.68.18'
 # iServer ip address
 
 def connectiServer(hostname, port, content):
@@ -92,7 +91,7 @@ if __name__ == '__main__':
     import sys
     from optparse import OptionParser
 
-    parser = OptionParser('%prog [OPTIONS] <host> <port>')
+    parser = OptionParser('%prog [OPTIONS] <host> <port> <iserver ip address>')
     parser.add_option(
             '-r', '--reset', dest='reset',
             help='reset database',
@@ -107,12 +106,12 @@ if __name__ == '__main__':
             )
 
     options, args = parser.parse_args()
-    if len(args)!=2:
+    if len(args)!=3:
         parser.print_usage()
         print('please specify two arguments')
         sys.exit(1)
 
-    host, port = args
+    host, port, iServerHost  = args
     connect_db(host, port, options.reset)
 
     while True:
