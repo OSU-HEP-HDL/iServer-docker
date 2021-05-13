@@ -40,7 +40,7 @@ docker run -p 3000:3000 -v grafana:/var/lib/grafana grafana/grafana
 ```
 Port 3000 on the local host is redirected to port 3000 in the grafana container.   
 Log in to grafana by pointing your web browser to <http://localhost:3000>. Use the default user and password: admin / admin .  
-- Build iserver container
+- Build iserver container  
 clone this repo and build container:
 ```
 git clone https://github.com/bdongmd/iServer-docker.git
