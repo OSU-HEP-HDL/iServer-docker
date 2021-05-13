@@ -1,7 +1,7 @@
 # Content
 * [Run script](#run-script)
 * [Build docker container](#build-docker-container)
-* [Existing container](#existing-container)
+* [Existing docker container](#existing-docker-container)
 * [Reference](#reference)
 
 ## Run script
@@ -67,9 +67,16 @@ At last,  run iserver container on the same network:
 ```
 docker run --network mynet iserver
 ```
+If you would like to run the container over a different iServer than the default one used here, run:
+```
+docker run --network mynet iserver python -u influxdb 8086 ip_addr
+```
+where `ip_addr` is the ip adress of the iServer you would like to access.
 
-## Existing container  
+
+## Existing docker container  
 bdongmd/iserver
+
 
 ## Reference
 For more details, check [data pipeline with Docker, InfluxDB, and Grafana](https://thedatafrog.com/en/articles/docker-influxdb-grafana/) to see how to setup influxdb with docker.  
